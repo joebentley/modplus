@@ -196,12 +196,11 @@ function createRSlider(container, min, max, onChange) {
 
 document.addEventListener('DOMContentLoaded', () => {
   createMultislider('multislider', sequence, (newSequence) => {
-    console.log('Sequence updated:', newSequence);
+    sequence = newSequence;
   }, { mode: 'line' });
 
   for (let i = 0; i < 4; i++) {
     createRSlider(`rslider${i}`, 0, 16, ({min, max}) => {
-      console.log(`Slider ${i} updated:`, { min, max });
       let offset = min;
       let length = max - min;
       lengths[i] = length;
@@ -212,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
     muteButton.classList.toggle('muted', muted[i]);
     muteButton.addEventListener('click', () => {
       const isMuted = muteButton.classList.toggle('muted');
-      console.log(`Sound ${i} ${isMuted ? 'muted' : 'unmuted'}`);
       muted[i] = isMuted;
     });
   }
