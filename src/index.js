@@ -142,8 +142,8 @@ function createRSlider(container, min, max, onChange) {
   
   svg.innerHTML = '';
   let isDragging = false;
-  let startY = (1 - max) * height;
-  let rectHeight = (max - min) * height;
+  let startY = (1 - max / 16) * height;
+  let rectHeight = (max - min) / 16 * height;
 
   // Create slider rect
   const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -157,8 +157,12 @@ function createRSlider(container, min, max, onChange) {
   const handlePointerEvent = (e) => {
     if (isDragging) {
       const boundRect = svg.getBoundingClientRect();
-      const currentY = e.clientY - boundRect.top;
+      let currentY = e.clientY - boundRect.top;
+      // round CurrentY to the nearest 16th of the height
+      currentY = Math.round(currentY / height * 16) / 16 * height;
       rectHeight = Math.abs(currentY - startY);
+      // Round rectHeight to the nearest 16th of the height
+      rectHeight = Math.round(rectHeight / height * 16) / 16 * height;
       rect.setAttribute('y', Math.min(startY, currentY));
       rect.setAttribute('height', rectHeight);
     }
@@ -168,6 +172,8 @@ function createRSlider(container, min, max, onChange) {
     isDragging = true;
     const boundRect = svg.getBoundingClientRect();
     startY = e.clientY - boundRect.top;
+    // Round startY to the nearest 16th of the height
+    startY = Math.round(startY / height * 16) / 16 * height;
     handlePointerEvent(e);
   }, { passive: false });
 
@@ -175,9 +181,14 @@ function createRSlider(container, min, max, onChange) {
 
   document.addEventListener('pointerup', () => {
     isDragging = false;
-    const minY = Math.min(startY, startY + rectHeight);
-    const maxY = Math.max(startY, startY + rectHeight);
-    onChange({ min: minY / height, max: maxY / height });
+    const startY = parseInt(rect.getAttribute('y'));
+    let minY = Math.min(startY, startY + rectHeight);
+    let maxY = Math.max(startY, startY + rectHeight);
+
+    minY = Math.ceil(minY / height * 16);
+    maxY = Math.ceil(maxY / height * 16);
+
+    onChange({ min: 16 - maxY, max: 16 - minY });
   });
 
   svg.addEventListener('selectstart', (e) => e.preventDefault());
@@ -189,12 +200,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { mode: 'line' });
 
   for (let i = 0; i < 4; i++) {
-    createRSlider(`rslider${i}`, 0, 1, ({min, max}) => {
+    createRSlider(`rslider${i}`, 0, 16, ({min, max}) => {
       console.log(`Slider ${i} updated:`, { min, max });
-      let offset = min * 16;
-      let length = (max - min) * 16;
-      lengths[i] = Math.round(length);
-      offsets[i] = Math.round(offset);
+      let offset = min;
+      let length = max - min;
+      lengths[i] = length;
+      offsets[i] = offset;
     });
 
     const muteButton = document.getElementById(`mute${i}`);
