@@ -24,6 +24,9 @@ jobs:
       - name: Build project
         run: npm run build # Ensure your build script creates the output directory
 
+      - name: Copy public files
+        run: cp -r public/. dist
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
