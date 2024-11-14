@@ -1,10 +1,14 @@
+body {
+  background-color: #eee;
+}
+
 #multislider {
-  background: #fff;
+  background: #eee;
   border: 1px solid #444;
 }
 
 .rslider {
-  background: #fff;
+  background: #eee;
   border: 1px solid #444;
 }
 
@@ -20,7 +24,7 @@
   height: 20px;
   margin: 0;
   margin-top: 5px;
-  background-color: #fff;
+  background-color: #eee;
   border: 1px solid #444;
   position: relative;
   cursor: pointer;
