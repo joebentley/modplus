@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Build project
-        run: npm run build # Ensure your build script creates the output directory
+        run: npx webpack
 
       - name: Copy public files
         run: cp -r public/. dist
