@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"gh-pages": "^6.2.0",
 		"tone": "^15.0.4"
 	},
 	"devDependencies": {
@@ -9,7 +8,6 @@
 		"webpack-dev-server": "^5.1.0"
 	},
 	"scripts": {
-		"build": "webpack",
-		"deploy": "gh-pages -d dist"
+		"build": "webpack"
 	}
 }
