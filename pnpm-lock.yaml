@@ -8,13 +8,13 @@ importers:
 
   .:
     dependencies:
-      gh-pages:
-        specifier: ^6.2.0
-        version: 6.2.0
       tone:
         specifier: ^15.0.4
         version: 15.0.4
     devDependencies:
+      gh-pages:
+        specifier: ^6.2.0
+        version: 6.2.0
       webpack:
         specifier: ^5.96.1
         version: 5.96.1(webpack-cli@5.1.4)

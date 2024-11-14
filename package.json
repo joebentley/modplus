@@ -3,11 +3,20 @@
 		"tone": "^15.0.4"
 	},
 	"devDependencies": {
+		"gh-pages": "^6.2.0",
 		"webpack": "^5.96.1",
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^5.1.0"
 	},
 	"scripts": {
-		"build": "webpack"
-	}
+		"start": "webpack server",
+		"build": "webpack",
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d dist"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/joebentley/modplus.git"
+	},
+	"homepage": "http://joebentley.github.io/modplus"
 }
