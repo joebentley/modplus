@@ -1,6 +1,7 @@
 body {
   background-color: #eee;
   overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #multislider {
@@ -75,4 +76,18 @@ body {
 .indexCounter {
   margin-top: 2px;
   margin-left: 2px;
+}
+
+.presetManager-container {
+  margin-left: 5px;
+}
+
+.presetManager-container p {
+  margin: 2px 3px;
+  font-size: 13px;
+  color: #555;
+}
+
+#presetManager {
+  border: 1px solid #444;
 }
