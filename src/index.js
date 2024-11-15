@@ -1,5 +1,13 @@
 import * as Tone from 'tone';
 
+// load the samples into ToneAudioBuffers
+const buffers = {
+  kick: new Tone.ToneAudioBuffer('samples/kick.wav'),
+  ch: new Tone.ToneAudioBuffer('samples/ch.wav'),
+  oh: new Tone.ToneAudioBuffer('samples/oh.wav'),
+  sn: new Tone.ToneAudioBuffer('samples/sn.wav')
+};
+
 // generate 16 random integers between 0 and 127
 let sequence = Array.from({ length: 16 }, () => {
   // 30% chance of zero
@@ -10,18 +18,20 @@ let lengths = [sequence.length, 4, 6, 8];
 let offsets = [0, 2, 6, 3];
 let muted = [false, true, true, true];
 
-// Create player pool for polyphony
 const VOICES = sequence.length;
-const playerPool = Array.from({ length: VOICES }, () => {
-  const players = [
-    new Tone.Player('samples/kick.wav').toDestination(),
-    new Tone.Player('samples/ch.wav').toDestination(),
-    new Tone.Player('samples/oh.wav').toDestination(),
-    new Tone.Player('samples/sn.wav').toDestination()];
-  return { players };
-});
+let playerPool;
 
 Tone.loaded().then(() => {
+  // Create player pool for polyphony
+  playerPool = Array.from({ length: VOICES }, () => {
+    const players = [
+      new Tone.Player(buffers.kick).toDestination(),
+      new Tone.Player(buffers.ch).toDestination(),
+      new Tone.Player(buffers.oh).toDestination(),
+      new Tone.Player(buffers.sn).toDestination()];
+    return { players };
+  });
+
   Tone.getTransport().start();
 
   let index = 0;
