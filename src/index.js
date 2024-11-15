@@ -47,7 +47,10 @@ Tone.loaded().then(() => {
         // Calculate index based on lengths and offsets
         const sequence_index = index % lengths[sample_index] + offsets[sample_index];
         // Cap sequence index to sequence length and get velocity
-        const velocity = sequence[sequence_index % sequence.length] / 127;
+        let velocity = sequence[sequence_index % sequence.length] / 127;
+
+        // Apply velocity curve
+        velocity = Math.pow(velocity, 1.8);
 
         voice.players[sample_index].volume.linearRampToValueAtTime(Tone.gainToDb(velocity), time);
 
