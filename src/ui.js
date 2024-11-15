@@ -175,3 +175,98 @@ export function createIndexCounter(container, numSteps) {
       });
   };
 }
+
+export function createPresetManager(container, numPresets, presetsPerRow, onSelected, onSaved) {
+  const svg = document.getElementById(container);
+  const width = parseInt(svg.getAttribute('width'));
+  const height = parseInt(svg.getAttribute('height'));
+  svg.innerHTML = '';
+
+  const margin = 4;
+  const buttonsWidth = width - margin;
+  const buttonsHeight = height - margin;
+
+  let hoveredPreset = -1;
+  let selectedPreset = -1;
+  let isShiftKeyDown = false;
+  let saved = [];
+
+  const presets = Array.from({ length: numPresets }).map((_, index) => {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', (index % presetsPerRow) * buttonsWidth / presetsPerRow + margin);
+    rect.setAttribute('y', Math.floor(index / presetsPerRow) * buttonsHeight / Math.ceil(numPresets / presetsPerRow) + margin);
+    rect.setAttribute('width', buttonsWidth / presetsPerRow - margin);
+    rect.setAttribute('height', buttonsHeight / Math.ceil(numPresets / presetsPerRow) - margin);
+    rect.setAttribute('fill', '#888');
+    rect.setAttribute('stroke', 'none');
+    rect.setAttribute('stroke-width', '1');
+    svg.appendChild(rect);
+
+    rect.addEventListener('mouseenter', (e) => {
+      hoveredPreset = index;
+      if (selectedPreset !== index) {
+        if (saved.includes(index) || isShiftKeyDown) {
+          rect.setAttribute('fill', '#000');
+        } else {
+          rect.setAttribute('fill', '#888');
+        }
+      }
+
+      rect.setAttribute('stroke', '#000');
+    });
+
+    rect.addEventListener('mouseleave', () => {
+      hoveredPreset = -1;
+      rect.setAttribute('stroke', 'none');
+      if (!saved.includes(index))
+        rect.setAttribute('fill', '#888');
+    });
+
+    rect.addEventListener('click', () => {
+      if (saved.includes(index)) {
+        selectedPreset = index;
+
+        for (let i = 0; i < numPresets; i++) {
+          if (presets[i].getAttribute('fill') === '#FFA500')
+            presets[i].setAttribute('fill', '#000');
+        }
+        rect.setAttribute('fill', '#FFA500');
+        if (onSelected) onSelected(index);
+      }
+
+      if (isShiftKeyDown) {
+        if (!saved.includes(index)) {
+          saved.push(index);
+          rect.setAttribute('fill', '#000');
+        }
+
+        if (onSaved) onSaved(index);
+      }
+    });
+
+    return rect;
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Shift') {
+      isShiftKeyDown = true;
+      if (hoveredPreset !== -1) {
+        presets[hoveredPreset].setAttribute('fill', '#000');
+      }
+    }
+  });
+
+  document.addEventListener('keyup', (e) => {
+    if (e.key === 'Shift') {
+      isShiftKeyDown = false;
+      if (!saved.includes(hoveredPreset) && hoveredPreset !== -1) {
+        presets[hoveredPreset].setAttribute('fill', '#888');
+      }
+    }
+  });
+
+  return {
+    getHoveredPreset: () => hoveredPreset,
+    isShiftKeyDown: () => isShiftKeyDown
+  };
+}

@@ -1,6 +1,6 @@
 import * as Tone from 'tone';
 
-import { createIndexCounter, createMultislider, createRSlider } from './ui';
+import { createIndexCounter, createMultislider, createPresetManager, createRSlider } from './ui';
 
 // load the samples into ToneAudioBuffers
 const buffers = {
@@ -100,6 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     indexCounterUpdateFunctions[i] = createIndexCounter(`indexCounter${i}`, 16);
   }
+
+  createPresetManager('presetManager', 64, 8, (preset) => {
+    console.log("preset selected", preset);
+  }, (preset) => {
+    console.log("preset saved", preset);
+  });
 
   document.querySelector('#start')?.addEventListener('click', async () => {
     await Tone.start();
