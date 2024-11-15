@@ -148,3 +148,30 @@ export function createRSlider(container, min, max, onChange) {
 
   svg.addEventListener('selectstart', (e) => e.preventDefault());
 }
+
+export function createIndexCounter(container, numSteps) {
+  const svg = document.getElementById(container);
+  // TODO: check for responsive width for smaller screens
+  const width = parseInt(svg.getAttribute('width'));
+  const height = parseInt(svg.getAttribute('height'));
+  svg.innerHTML = '';
+
+  Array.from({ length: numSteps }).forEach((_, index) => {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', index * width / numSteps);
+    rect.setAttribute('y', 0);
+    rect.setAttribute('width', width / numSteps - 2);
+    rect.setAttribute('height', height);
+    rect.setAttribute('fill', '#888');
+    svg.appendChild(rect);
+  });
+
+  return (index, velocity) => {
+      const rects = svg.children;
+      Array.from(rects).forEach((rect, i) => {
+        let fillCol = velocity > 0.0 ? '#fff' : '#000';
+
+        rect.setAttribute('fill', i === index ? fillCol : '#888');
+      });
+  };
+}

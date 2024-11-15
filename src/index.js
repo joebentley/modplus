@@ -1,6 +1,6 @@
 import * as Tone from 'tone';
 
-import { createMultislider, createRSlider } from './ui';
+import { createIndexCounter, createMultislider, createRSlider } from './ui';
 
 // load the samples into ToneAudioBuffers
 const buffers = {
@@ -19,6 +19,7 @@ let sequence = Array.from({ length: 16 }, () => {
 let lengths = [sequence.length, 4, 6, 8];
 let offsets = [0, 2, 6, 3];
 let muted = [false, true, true, true];
+let indexCounterUpdateFunctions = [];
 
 const VOICES = sequence.length;
 let playerPool;
@@ -49,6 +50,9 @@ Tone.loaded().then(() => {
         const velocity = sequence[sequence_index % sequence.length] / 127;
 
         voice.players[sample_index].volume.linearRampToValueAtTime(Tone.gainToDb(velocity), time);
+
+        if (!muted[sample_index])
+          indexCounterUpdateFunctions[sample_index](sequence_index, velocity);
 
         // Play the note
         if (!muted[sample_index])
@@ -90,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const isMuted = muteButton.classList.toggle('muted');
       muted[i] = isMuted;
     });
+
+    indexCounterUpdateFunctions[i] = createIndexCounter(`indexCounter${i}`, 16);
   }
 
   document.querySelector('#start')?.addEventListener('click', async () => {
