@@ -281,6 +281,10 @@ export function createPresetManager(container, numPresets, presetsPerRow, onSele
     }
   });
 
+  window.addEventListener('focus', () => {
+    isShiftKeyDown = false;
+  });
+
   return {
     getHoveredPreset: () => hoveredPreset,
     isShiftKeyDown: () => isShiftKeyDown
