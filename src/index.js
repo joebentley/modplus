@@ -21,6 +21,8 @@ let offsets = [0, 2, 6, 3];
 let muted = [false, true, true, true];
 let indexCounterUpdateFunctions = [];
 
+let presets = {};
+
 const VOICES = sequence.length;
 let playerPool;
 
@@ -69,12 +71,13 @@ Tone.loaded().then(() => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  createMultislider('multislider', [...sequence], (newSequence) => {
+  const multislider = createMultislider('multislider', [...sequence], (newSequence) => {
     sequence = newSequence;
   }, { mode: 'line' });
 
+  let rsliders = [];
   for (let i = 0; i < 4; i++) {
-    createRSlider(`rslider${i}`, offsets[i], offsets[i] + lengths[i], ({min, max}) => {
+    rsliders.push(createRSlider(`rslider${i}`, offsets[i], offsets[i] + lengths[i], ({min, max}) => {
       let offset = min;
       let length = max - min;
       lengths[i] = length;
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (offsets[i] + lengths[i] > sequence.length) {
         lengths[i] = sequence.length - offsets[i];
       }
-    });
+    }));
 
     const muteButton = document.getElementById(`mute${i}`);
     muteButton.classList.toggle('muted', muted[i]);
@@ -103,8 +106,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   createPresetManager('presetManager', 64, 8, (preset) => {
     console.log("preset selected", preset);
+    const currentPreset = presets[preset];
+    sequence = [...currentPreset.sequence];
+    offsets = [...currentPreset.offsets];
+    lengths = [...currentPreset.lengths];
+    muted = [...currentPreset.muted];
+    multislider.update(sequence);
+    for (let i = 0; i < 4; i++) {
+      rsliders[i].update(offsets[i], offsets[i] + lengths[i]);
+      const muteButton = document.getElementById(`mute${i}`);
+      muteButton.classList.toggle('muted', muted[i]);
+    };
   }, (preset) => {
     console.log("preset saved", preset);
+    presets[preset] = {
+      sequence: [...sequence],
+      offsets: [...offsets],
+      lengths: [...lengths],
+      muted: [...muted]
+    };
   });
 
   document.querySelector('#start')?.addEventListener('click', async () => {

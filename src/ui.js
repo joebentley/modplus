@@ -143,10 +143,27 @@ export function createRSlider(container, min, max, onChange) {
       rect.setAttribute('height', height);
     }
 
-    onChange({ min: 16 - maxY, max: 16 - minY });
+    let min = 16 - maxY;
+    let max = 16 - minY;
+
+    // hack to make sure size is correct
+    startY = (1 - max / 16) * height;
+    rectHeight = (max - min) / 16 * height;
+    rect.setAttribute('y', startY);
+    rect.setAttribute('height', rectHeight);
+
+    onChange({ min, max });
   });
 
   svg.addEventListener('selectstart', (e) => e.preventDefault());
+
+  return { update: (min, max) => {
+    console.log(min, max);
+    startY = (1 - max / 16) * height;
+    rectHeight = (max - min) / 16 * height;
+    rect.setAttribute('y', startY);
+    rect.setAttribute('height', rectHeight);
+  }};
 }
 
 export function createIndexCounter(container, numSteps) {
@@ -223,7 +240,7 @@ export function createPresetManager(container, numPresets, presetsPerRow, onSele
     });
 
     rect.addEventListener('click', () => {
-      if (saved.includes(index)) {
+      if (!isShiftKeyDown && saved.includes(index)) {
         selectedPreset = index;
 
         for (let i = 0; i < numPresets; i++) {
@@ -250,7 +267,7 @@ export function createPresetManager(container, numPresets, presetsPerRow, onSele
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Shift') {
       isShiftKeyDown = true;
-      if (hoveredPreset !== -1) {
+      if (selectedPreset !== hoveredPreset && hoveredPreset !== -1) {
         presets[hoveredPreset].setAttribute('fill', '#000');
       }
     }
