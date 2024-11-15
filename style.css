@@ -57,6 +57,22 @@ body {
 }
 
 .sliders-row {
+  margin-top: 5px;
   display: flex;
   align-items: flex-start;
+}
+
+.multislider-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+#indexCounter0 {
+  margin-top: 6px;
+}
+
+.indexCounter {
+  margin-top: 2px;
+  margin-left: 2px;
 }
