@@ -64,7 +64,10 @@ function createMultislider(container, sequence, onChange, options = { mode: 'bar
   const svg = document.getElementById(container);
   const width = parseInt(svg.getAttribute('width'));
   const height = parseInt(svg.getAttribute('height'));
-  const sliderWidth = width / sequence.length;
+
+  const realWidth = svg.getBoundingClientRect().width;
+  const sliderWidth = realWidth / sequence.length;
+
   const lineThickness = 2;
   
   svg.innerHTML = '';
@@ -85,7 +88,7 @@ function createMultislider(container, sequence, onChange, options = { mode: 'bar
     if (options.mode === 'line') {
       slider.setAttribute('x', x);
       slider.setAttribute('y', height - sliderHeight - lineThickness/2);
-      slider.setAttribute('width', sliderWidth - 1);
+      slider.setAttribute('width', sliderWidth);
       slider.setAttribute('height', lineThickness);
     } else {
       slider.setAttribute('x', x);
