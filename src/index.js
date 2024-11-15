@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { mode: 'line' });
 
   for (let i = 0; i < 4; i++) {
-    createRSlider(`rslider${i}`, 0, 16, ({min, max}) => {
+    createRSlider(`rslider${i}`, offsets[i], offsets[i] + lengths[i], ({min, max}) => {
       let offset = min;
       let length = max - min;
       lengths[i] = length;
