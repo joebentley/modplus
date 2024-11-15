@@ -127,12 +127,21 @@ export function createRSlider(container, min, max, onChange) {
 
   document.addEventListener('pointerup', () => {
     isDragging = false;
-    const startY = parseInt(rect.getAttribute('y'));
-    let minY = Math.min(startY, startY + rectHeight);
-    let maxY = Math.max(startY, startY + rectHeight);
+    // Get actual top of rectangle, since startY can be the bottom
+    const currentY = parseInt(rect.getAttribute('y'));
+    let minY = Math.min(currentY, currentY + rectHeight);
+    let maxY = Math.max(currentY, currentY + rectHeight);
 
     minY = Math.ceil(minY / height * 16);
     maxY = Math.ceil(maxY / height * 16);
+
+    // if minY == maxY, set to full range
+    if (minY === maxY) {
+      maxY = 16;
+      minY = 0;
+      rect.setAttribute('y', 0);
+      rect.setAttribute('height', height);
+    }
 
     onChange({ min: 16 - maxY, max: 16 - minY });
   });
