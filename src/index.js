@@ -1,10 +1,5 @@
 import * as Tone from 'tone';
 
-const player1 = new Tone.Player('samples/kick.wav').toDestination();
-const player2 = new Tone.Player('samples/ch.wav').toDestination();
-const player3 = new Tone.Player('samples/oh.wav').toDestination();
-const player4 = new Tone.Player('samples/sn.wav').toDestination();
-
 // generate 16 random integers between 0 and 127
 let sequence = Array.from({ length: 16 }, () => {
   // 30% chance of zero
