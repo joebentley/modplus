@@ -190,7 +190,7 @@ function createRSlider(container, min, max, onChange) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  createMultislider('multislider', sequence, (newSequence) => {
+  createMultislider('multislider', [...sequence], (newSequence) => {
     sequence = newSequence;
   }, { mode: 'line' });
 
