@@ -158,7 +158,6 @@ export function createRSlider(container, min, max, onChange) {
   svg.addEventListener('selectstart', (e) => e.preventDefault());
 
   return { update: (min, max) => {
-    console.log(min, max);
     startY = (1 - max / 16) * height;
     rectHeight = (max - min) / 16 * height;
     rect.setAttribute('y', startY);

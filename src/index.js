@@ -105,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   createPresetManager('presetManager', 64, 8, (preset) => {
-    console.log("preset selected", preset);
     const currentPreset = presets[preset];
     sequence = [...currentPreset.sequence];
     offsets = [...currentPreset.offsets];
@@ -118,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
       muteButton.classList.toggle('muted', muted[i]);
     };
   }, (preset) => {
-    console.log("preset saved", preset);
     presets[preset] = {
       sequence: [...sequence],
       offsets: [...offsets],
