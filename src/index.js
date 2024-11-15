@@ -12,8 +12,8 @@ const buffers = {
 
 // generate 16 random integers between 0 and 127
 let sequence = Array.from({ length: 16 }, () => {
-  // 30% chance of zero
-  return Math.random() < 0.3 ? 0 : Math.floor(Math.random() * 127) + 1;
+  // 75% chance of zero
+  return Math.random() < 0.75 ? 0 : Math.floor(Math.random() * 68) + 60;
 });
 
 let lengths = [sequence.length, 4, 6, 8];
