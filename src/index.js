@@ -210,6 +210,16 @@ document.addEventListener('DOMContentLoaded', () => {
       let length = max - min;
       lengths[i] = length;
       offsets[i] = offset;
+
+      // Prevent offsets from being negative due to mouse dragging outside the slider
+      if (offsets[i] < 0) {
+        offsets[i] = 0;
+      }
+
+      // Prevent lengths from exceeding the sequence length
+      if (offsets[i] + lengths[i] > sequence.length) {
+        lengths[i] = sequence.length - offsets[i];
+      }
     });
 
     const muteButton = document.getElementById(`mute${i}`);
