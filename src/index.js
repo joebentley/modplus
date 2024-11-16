@@ -3,12 +3,23 @@ import * as Tone from 'tone';
 import { createIndexCounter, createMultislider, createPresetManager, createRSlider } from './ui';
 
 // load the samples into ToneAudioBuffers
-const buffers = {
-  kick: new Tone.ToneAudioBuffer('samples/kick.wav'),
-  ch: new Tone.ToneAudioBuffer('samples/ch.wav'),
-  oh: new Tone.ToneAudioBuffer('samples/oh.wav'),
-  sn: new Tone.ToneAudioBuffer('samples/sn.wav')
-};
+let sampleNames = ['kick.wav',
+'ch.wav',
+'oh.wav',
+'sn.wav',
+'C21PIPE1.wav',
+'I06SOLID_K.wav',
+'I37CLSD_H1.wav',
+'I38OPEN_H1.wav',
+'I48CLAVE1.wav',
+'I61CAN1.wav'];
+
+// Construct buffers
+const buffers = {};
+sampleNames.forEach((sample) => {
+  const sampleNameWithoutExtension = sample.replace('.wav', '');
+  buffers[sampleNameWithoutExtension] = new Tone.ToneAudioBuffer(`samples/${sample}`);
+});
 
 // generate 16 random integers between 0 and 127
 let sequence = Array.from({ length: 16 }, () => {
@@ -71,6 +82,36 @@ Tone.loaded().then(() => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Initial samples in order
+  const initialSamples = ['kick.wav', 'ch.wav', 'oh.wav', 'sn.wav'];
+  
+  // Add select population
+  for (let i = 0; i < 4; i++) {
+    const select = document.getElementById(`dropdown${i}`);
+    sampleNames.forEach(sample => {
+      const option = document.createElement('option');
+      option.value = sample;
+      option.text = sample.replace('.wav', '');
+      if (sample === initialSamples[i]) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Add change event listener
+    select.addEventListener('change', (e) => {
+      const newSampleName = e.target.value;
+      const trackIndex = i;
+      const sampleNameWithoutExtension = newSampleName.replace('.wav', '');
+      
+      // Update all voices in the pool for this track
+      playerPool.forEach(voice => {
+        voice.players[trackIndex].dispose(); // Clean up old player
+        voice.players[trackIndex] = new Tone.Player(buffers[sampleNameWithoutExtension]).toDestination();
+      });
+    });
+  }
+
   const multislider = createMultislider('multislider', [...sequence], (newSequence) => {
     sequence = newSequence;
   }, { mode: 'line' });
