@@ -91,3 +91,27 @@ body {
 #presetManager {
   border: 1px solid #444;
 }
+
+.dropdown-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 8px;
+}
+
+.dropdown {
+  width: 100px;
+}
+
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-number {
+  font-size: 13px;
+  color: #444;
+  width: 15px;
+  text-align: right;
+}
